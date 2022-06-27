@@ -12,8 +12,9 @@ class Ship
 {
 
 public:
-	int shipSize;
-	int numOfHits;
+	int shipSize = 4;
+	int numOfHits = 3;
+	bool status =zayopa;
 	std::vector<coordinates> positions;
 
 

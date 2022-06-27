@@ -40,3 +40,8 @@ void Board::printSea(int size)
 		std::cout << std::endl;
 	}
 }
+
+void Board::setShip(int x, int y)
+{
+	Sea[x][y] = '1';
+}

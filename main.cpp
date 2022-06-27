@@ -13,6 +13,7 @@ int main() {
   //  Board board(menu.getBoardSize());
   //  board.printSea(menu.getBoardSize());
     Player player(menu.getBoardSize());
+    player.PlaceShips();
     player.PrintPlayerInfo();
     return 0;
 }

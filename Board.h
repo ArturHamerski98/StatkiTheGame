@@ -11,5 +11,6 @@ public:
 	Board(int size);
 	Board();
 	void printSea(int size);
+	void setShip(int x,int y);
 
 };
