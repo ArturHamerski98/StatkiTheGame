@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+
 class Board
 {
 private:
@@ -12,4 +13,3 @@ public:
 	void printSea(int size);
 
 };
-

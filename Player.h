@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "Board.h"
+#include <vector>
+#include "Ship.h"
 class Player
 {
 protected:
@@ -8,6 +10,7 @@ protected:
 	Board myBoard;
 	Board enemyBoard;
 	int size;
+	std::vector<Ship> Fleet;
 public:
 	void TakeAShot();
 	void PlaceShips();
