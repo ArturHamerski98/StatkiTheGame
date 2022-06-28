@@ -9,7 +9,7 @@ void Menu::setBoardSize(int bs)
 void  Menu::printMenu()
 {
     int x;
-    std::cout << "Wpraowadz rozmiar planszy: \n";
+    std::cout << "Wpraowaaaaaaaaaaaaaaadz rozmiar planszy: \n";
     std::cin >> x;
     std::cout << std::endl;
     setBoardSize(x);
