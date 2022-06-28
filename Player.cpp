@@ -94,10 +94,10 @@ void Player::PrintPlayerInfo()
 }
 Player::Player(int size)
 {
-	
 	std::string name;
-	std::cout << "Enter youre name: ";
+	std::cout << "\nEnter youre name: ";
 	std::cin >> name;
+	std::cout << "\n";
 	this->name = name;
 	this->size = size;
 

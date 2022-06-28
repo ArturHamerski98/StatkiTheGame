@@ -10,7 +10,11 @@ int main() {
     //menu.printMenu();
     GameHandler myGame;
     myGame.getBoardSize();
+    myGame.getTurnLimit();
+    system("cls");
     myGame.pVp();
+   
+
 
 
 
