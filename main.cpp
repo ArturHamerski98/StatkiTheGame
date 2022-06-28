@@ -18,5 +18,11 @@ int main() {
     player2.PlaceShips();
     player1.PrintPlayerInfo();
     player2.PrintPlayerInfo();
+    player1.TakeAShot(player2);
+    player2.TakeAShot(player1);
+    player1.TakeAShot(player2);
+    player2.TakeAShot(player1);
+    player1.PrintPlayerInfo();
+    player2.PrintPlayerInfo();
     return 0;
 }
