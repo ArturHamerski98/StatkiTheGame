@@ -106,8 +106,8 @@ Player::Player(int size)
 	enemyBoard = Board(size);
 	Fleet.push_back(Ship(1));
 	Fleet.push_back(Ship(2));
-	Fleet.push_back(Ship(3));
-	Fleet.push_back(Ship(4));
+//	Fleet.push_back(Ship(3));
+//	Fleet.push_back(Ship(4));
 	
 
 

@@ -1,10 +1,16 @@
 #pragma once
 class GameHandler
 {
+	int boardSize;
+	int turnLimit;
+public:
+	void pVp();
+	void getBoardSize();
+
 
 	/*Zadanie: Trzeba stworzyæ klasê GameHandler w która :
-	*Tworzy dwóch graczy
-	* Dwaj gracze Tworz¹ swoje statki
+	+*Tworzy dwóch graczy
+	+* Dwaj gracze Tworz¹ swoje statki
 	* Gracze wykonuj¹ ruch na zmianê
 	 - wyœwietla sie informacja, którego gracza jest tura
 	 -wyswietlaja sie 2 plansze
