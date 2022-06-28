@@ -12,8 +12,11 @@ int main() {
     
   //  Board board(menu.getBoardSize());
   //  board.printSea(menu.getBoardSize());
-    Player player(menu.getBoardSize());
-    player.PlaceShips();
-    player.PrintPlayerInfo();
+    Player player1(menu.getBoardSize());
+    player1.PlaceShips();
+    Player player2(menu.getBoardSize());
+    player2.PlaceShips();
+    player1.PrintPlayerInfo();
+    player2.PrintPlayerInfo();
     return 0;
 }
