@@ -10,10 +10,12 @@ void Player::TakeAShot()
 	-gracz1 podaje koordynaty
 	-sprawdzamy czy koordynaty nie przekraczaj¹ rozmiaru planszy, albo czy czy zamiast cyfry gracz1 nie wpisa³ eloelo320
 	-jesli koordynaty bledne to prosimy zeby wpisal jeszcze raz
+	-jesli koordynaty prawidlowe to w pierwszej kolejnosci sprawdzamy czy gracz ju¿ nie strzela³ w to miejsce, jeœli tak, to informujemy go ¿e miss
+	i przerywamy pêtle(tura nastêpnego gracza)
 	-jesli koordynaty prawidlowe to sprawdzamy co znajduje siê pod dan¹ pozycj¹ w myBoard gracza2
 	-Jeœli trafimy to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'H'
 	-Jeœli nie trafimy, to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'M'
-	
+	-
 	
 	*/
 }
@@ -34,6 +36,13 @@ void Player::PlaceShips()
 		[3][5] [6][5] -Ok bo y takie samo(5)
 		[3][4]  [5] [6] - Nie ok bo nic takie samo
 		a jego d³ugoœæ to ró¿nica nie takich samych koordynatów + 1
+
+		
+		
+		*Zadanie z gwiazdk¹*:Nie mo¿na umieœciæ 2 statków w tym samym miejscu
+		
+		*#*Zadanie z gwiazdk¹ i hasztagiem*#*: When trying to place two ships next to each other (touching corners are okay), the Ships are
+			too close! Error message is displayed and the program asks again for an input
 
 
 	*/
