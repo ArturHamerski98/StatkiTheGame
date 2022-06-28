@@ -12,7 +12,8 @@ protected:
 	int size;
 	std::vector<Ship> Fleet;
 public:
-	void TakeAShot();
+	int enterCoordinate();
+	void TakeAShot(Player &enemy);
 	void PlaceShips();
 	void PrintPlayerInfo();
 	Player(int size);

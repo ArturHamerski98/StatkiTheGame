@@ -1,22 +1,73 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 #include <iostream>
 #include "Board.h"
+#include <string>
 
+int Player::enterCoordinate() {
+	std::string number;
+	std::cin >> number;
 
-void Player::TakeAShot()
+	//checking for negative numbers
+	if (number[0] == '-') {
+		std::cout << "Invalid input - negative values are not permitted! Try once again!\n";
+		enterCoordinate();
+	}
+
+	for (int i = 0; number[i] != 0; i++) {
+		if (number[i] > '9' || number[i] < '0') {
+			std::cout << "Invalid input - detected a sign not being a digit! Try once again!\n";
+			enterCoordinate();
+		}
+	}
+	int x = stoi(number);
+	if (x > size) {
+		std::cout << "Swum overboard! Try once again";
+		enterCoordinate();
+	}
+	return x;
+
+}
+void Player::TakeAShot(Player &enemy)
 {
+	int x, y;
+	std::cout << "Specify the X-coordinate of the area you want to shoot: ";
+	x = enterCoordinate();
+
+	std::cout << "Specify the Y-coordinate of the area you want to shoot: ";
+	y = enterCoordinate();
+
+	if (enemyBoard.getCellValue(x, y) != '0') {
+		std::cout << "You've missed!\n";
+		return;
+	}
+
+	if (enemy.myBoard.getCellValue(x,y) == '0') {
+		std::cout << "You've missed!\n";
+		enemyBoard.setCellValue(x, y, 'M');
+		enemy.myBoard.setCellValue(x, y, 'M');
+		return;
+	}
+	if (enemy.myBoard.getCellValue(x, y) == '1') {
+		std::cout << "You've hit!\n";
+		enemyBoard.setCellValue(x, y, 'H');
+		enemy.myBoard.setCellValue(x, y, 'H');
+		return;
+	}
+
+
+
 
 	/*ZADANIE:
 	-gracz1 podaje koordynaty
-	-sprawdzamy czy koordynaty nie przekraczaj¹ rozmiaru planszy, albo czy czy zamiast cyfry gracz1 nie wpisa³ eloelo320
+	-sprawdzamy czy koordynaty nie przekraczajÂ¹ rozmiaru planszy, albo czy czy zamiast cyfry gracz1 nie wpisaÂ³ eloelo320
 	-jesli koordynaty bledne to prosimy zeby wpisal jeszcze raz
-	-jesli koordynaty prawidlowe to w pierwszej kolejnosci sprawdzamy czy gracz ju¿ nie strzela³ w to miejsce, jeœli tak, to informujemy go ¿e miss
-	i przerywamy pêtle(tura nastêpnego gracza)
-	-jesli koordynaty prawidlowe to sprawdzamy co znajduje siê pod dan¹ pozycj¹ w myBoard gracza2
-	-Jeœli trafimy to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'H'
-	-Jeœli nie trafimy, to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'M'
-	-
+	-jesli koordynaty prawidlowe to w pierwszej kolejnosci sprawdzamy czy gracz juÂ¿ nie strzelaÂ³ w to miejsce, jeÅ“li tak, to informujemy go Â¿e miss
+	i przerywamy pÃªtle(tura nastÃªpnego gracza)
+	-jesli koordynaty prawidlowe to sprawdzamy co znajduje siÃª pod danÂ¹ pozycjÂ¹ w myBoard gracza2
+	-JeÅ“li trafimy to na Enemyboard gracza1 oraz myBoard Gracza 2 pod danÂ¹ pozycjÂ¹ piszemy 'H'
+	-JeÅ“li nie trafimy, to na Enemyboard gracza1 oraz myBoard Gracza 2 pod danÂ¹ pozycjÂ¹ piszemy 'M'
 	
+
 	*/
 }
 
@@ -24,24 +75,24 @@ void Player::PlaceShips()
 {
 	
 	
-	/*Dla przypadku statku wiêkszego ni¿ 1 pobieramy 2 koordynaty(pocz¹tek statku, koniec statku)
+	/*Dla przypadku statku wiÄ™kszego niÅ¼ 1 pobieramy 2 koordynaty(poczÄ…tek statku, koniec statku)
 	////ZADANIE:
-	. Nale¿y zrobiæ kilka rzeczy:
-	-Sprawdziæ czy aby na pewno mo¿emy dany statek stworzyæ:
-		*Sprawdziæ czy statek nie jest zrobiony po skosie
-		*Czy ma odpowiedni¹ d³ugoœæ?(size) np. chcemy stworzyæ statek 4 masztowy. Ktoœ wysy³a nam koordynaty start[0,0] end[0,2].
-		Taki statek ma d³ugoœæ 3 ([0,0][0,1][0,2]) zatem nie mo¿e byæ bo chcemy statek 4 masztowy. start[0][0] end[0][4] akceptujemy bo ma dlugoœc 4
-		PodpowiedŸ: zwróæ uwagê, ¿e ¿eby statek by³ ustawiony pionowo lub poziomo, to musi mieæ albo x albo y takie same np.
+	. NaleÅ¼y zrobiÄ‡ kilka rzeczy:
+	-SprawdziÄ‡ czy aby na pewno moÅ¼emy dany statek stworzyÄ‡:
+		*SprawdziÄ‡ czy statek nie jest zrobiony po skosie
+		*Czy ma odpowiedniÄ… dÅ‚ugoÅ›Ä‡?(size) np. chcemy stworzyÄ‡ statek 4 masztowy. KtoÅ› wysyÅ‚a nam koordynaty start[0,0] end[0,2].
+		Taki statek ma dÅ‚ugoÅ›Ä‡ 3 ([0,0][0,1][0,2]) zatem nie moÅ¼e byÄ‡ bo chcemy statek 4 masztowy. start[0][0] end[0][4] akceptujemy bo ma dlugoÅ›c 4
+		PodpowiedÅº: zwrÃ³Ä‡ uwagÄ™, Å¼e Å¼eby statek byÅ‚ ustawiony pionowo lub poziomo, to musi mieÄ‡ albo x albo y takie same np.
 		[3][2] [3][4] -Ok bo x takie samo(3)
 		[3][5] [6][5] -Ok bo y takie samo(5)
 		[3][4]  [5] [6] - Nie ok bo nic takie samo
-		a jego d³ugoœæ to ró¿nica nie takich samych koordynatów + 1
+		a jego dÅ‚ugoÅ›Ä‡ to rÃ³Å¼nica nie takich samych koordynatÃ³w + 1
 
 		
 		
-		*Zadanie z gwiazdk¹*:Nie mo¿na umieœciæ 2 statków w tym samym miejscu
+		*Zadanie z gwiazdkÄ…*:Nie moÅ¼na umieÅ›ciÄ‡ 2 statkÃ³w w tym samym miejscu
 		
-		*#*Zadanie z gwiazdk¹ i hasztagiem*#*: When trying to place two ships next to each other (touching corners are okay), the Ships are
+		*#*Zadanie z gwiazdkÄ… i hasztagiem*#*: When trying to place two ships next to each other (touching corners are okay), the Ships are
 			too close! Error message is displayed and the program asks again for an input
 
 
@@ -70,14 +121,14 @@ void Player::PlaceShips()
 		temp.x = xStart;
 		temp.y = yStart;
 		
-		//Tutaj trzeba wypchn¹æ WSZYSTKIE poprawne koordynaty
+		//Tutaj trzeba wypchnÄ…Ä‡ WSZYSTKIE poprawne koordynaty
 		Fleet[i].positions.push_back(temp);
 	
-		//Tutaj trzeba wypchn¹æ WSZYSTKIE poprawne koordynaty
-		myBoard.setShip(xStart, yStart);
+		//Tutaj trzeba wypchnÄ…Ä‡ WSZYSTKIE poprawne koordynaty
+		myBoard.setCellValue(xStart, yStart,'1');
 		
 		if (Fleet[i].shipSize > 1)
-			myBoard.setShip(xEnd, yEnd);
+			myBoard.setCellValue(xEnd, yEnd,'1');
 
 	}
 
@@ -106,8 +157,8 @@ Player::Player(int size)
 	enemyBoard = Board(size);
 	Fleet.push_back(Ship(1));
 	Fleet.push_back(Ship(2));
-	Fleet.push_back(Ship(3));
-	Fleet.push_back(Ship(4));
+	//Fleet.push_back(Ship(3));
+	//Fleet.push_back(Ship(4));
 	
 
 
