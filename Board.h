@@ -11,6 +11,7 @@ public:
 	Board(int size);
 	Board();
 	void printSea(int size);
-	void setShip(int x,int y);
+	void setCellValue(int x,int y, char value);
+	char getCellValue(int x, int y);
 
 };

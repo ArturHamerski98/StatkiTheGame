@@ -41,7 +41,12 @@ void Board::printSea(int size)
 	}
 }
 
-void Board::setShip(int x, int y)
+void Board::setCellValue(int x, int y,char value)
 {
-	Sea[x][y] = '1';
+	Sea[x][y] = value;
+}
+
+char Board::getCellValue(int x, int y)
+{
+	return Sea[x][y];
 }
