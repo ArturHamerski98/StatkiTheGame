@@ -22,6 +22,7 @@ public:
  - informujemy czy trafienie czy pudlo(tylko cout nie implementacja)
 + -czekamy 3sekundy, czyscimy konsole, zmiana tury na gracza numer 2
 + -zrobi� Level4
+
 * */
 
 };
