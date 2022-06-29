@@ -61,6 +61,9 @@ void Player::PlaceShips()
 	{
 		std::vector<coordinates> currentShipVector;
 		std::vector<coordinates> currentShipVectorExtended;
+
+		system("CLS");
+		myBoard.printSea(size);
 		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
 		
 		std::cout << "Podaj x start: ";
@@ -97,7 +100,6 @@ void Player::PlaceShips()
 
 			takenPositions.push_back(temp);
 
-			system("CLS");
 			continue;
 		}
 
@@ -112,6 +114,7 @@ void Player::PlaceShips()
 			if ((xEnd < xStart) || (yEnd < yStart)) {
 				std::cout << "Startowe koordynaty musza byc mniejsze" << std::endl;
 				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
 				i--;
 				continue;
 			}
@@ -119,19 +122,22 @@ void Player::PlaceShips()
 			else if ((xStart != xEnd) && (yStart != yEnd)) {
 				std::cout << "Nie po skosie!" << std::endl;
 				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
 				i--;
 				continue;
 			}
 			//badamy czy odpowiednia długość statku
 			else if ((xStart == xEnd) && (modul(yStart-yEnd)+1 != Fleet[i].shipSize)) {
 				std::cout << "Nie ta dlugosc!" << std::endl;
-				std::cout << "Try again!" << std::endl;
+				std::cout << "Try again!" << std::endl; 
+				Sleep(2000);
 				i--;
 				continue;
 			}
 			else if ((yStart == yEnd) && (modul(xStart - xEnd) + 1 != Fleet[i].shipSize)) {
 				std::cout << "Nie ta dlugosc!" << std::endl;
 				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
 				i--;
 				continue;
 			}
@@ -198,6 +204,7 @@ void Player::PlaceShips()
 
 		if (isTaken == 1) {
 			std::cout << "statki zachodza na siebie" << std::endl;
+			Sleep(2000);
 			i--;
 			continue;
 		}
@@ -208,9 +215,7 @@ void Player::PlaceShips()
 				myBoard.setShip(currentShipVector[j].x, currentShipVector[j].y);
 			}
 		}
-		system("CLS");
-
-
+		
 	}
 }
 
