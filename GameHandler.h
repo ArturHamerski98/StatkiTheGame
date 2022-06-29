@@ -1,11 +1,16 @@
 #pragma once
 class GameHandler
 {
-	int boardSize;
+	
 	int turnLimit;
+protected:
+	int BoardSize;
+	void setBoardSize(int bs);
+
 public:
 	void pVp();
-	void getBoardSize();
+	int getBoardSize();
+	void displayShotResult();
 	void getTurnLimit();
 		/*Zadanie: Trzeba stworzyæ klasê GameHandler w która :
 	+*Tworzy dwóch graczy
@@ -15,9 +20,9 @@ public:
 	* -wyswietlaja sie 2 plansze
 	 -prosi gracza o podanie koordynatow(tylko cout nie implementacja)
 	 - informujemy czy trafienie czy pudlo(tylko cout nie implementacja)
-	 -czekamy 3sekundy, czyscimy konsole, zmiana tury na gracza numer 2
-	 -zrobiæ Level4
-	*
+	+ -czekamy 3sekundy, czyscimy konsole, zmiana tury na gracza numer 2
+	+ -zrobiæ Level4
+	
 	* */
 	
 };
