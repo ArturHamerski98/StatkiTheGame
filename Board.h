@@ -12,5 +12,5 @@ public:
 	Board();
 	void printSea(int size);
 	void setShip(int x,int y);
-	char Board::getCellValue(int x, int y);
+	char getCellValue(int x, int y);
 };

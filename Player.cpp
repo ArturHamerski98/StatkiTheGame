@@ -54,9 +54,11 @@ void Player::PlaceShips()
 	int xStart, yStart, xEnd = -1, yEnd = -1;
 	coordinates temp, exact;
 	std::vector<coordinates> takenPositions;
+	
 
 	for (int i = 0; i < Fleet.size(); i++)
 	{
+		std::vector<coordinates> currentShipVector;
 		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
 		
 		std::cout << "Podaj x start: ";
@@ -68,9 +70,12 @@ void Player::PlaceShips()
 			temp.x = xStart;
 			temp.y = yStart;
 
+			takenPositions.push_back(temp);
+
 			Fleet[i].positions.push_back(temp);
 
 			myBoard.setShip(xStart, yStart);
+			continue;
 		}
 
 		if (Fleet[i].shipSize > 1)
@@ -109,7 +114,6 @@ void Player::PlaceShips()
 			}
 		}
 
-		//wektor struktur ---> 
 
 		//umieszczamy wszystkie koordynaty
 		
@@ -121,11 +125,10 @@ void Player::PlaceShips()
 			for (int i = 0; i < dif; i++) {
 				temp.x = xStart + i;
 				temp.y = yStart;
+				currentShipVector.push_back(temp);
 
-				takenPositions.push_back(temp);
-
-				Fleet[i].positions.push_back(temp);
-				myBoard.setShip(temp.x, temp.y);
+				/*Fleet[i].positions.push_back(temp);
+				myBoard.setShip(temp.x, temp.y);*/
 			}
 		}
 		else if (xStart == xEnd) {
@@ -133,22 +136,34 @@ void Player::PlaceShips()
 			for (int i = 0; i < dif; i++) {
 				temp.x = xStart;
 				temp.y = yStart + i;
-				Fleet[i].positions.push_back(temp);
-				myBoard.setShip(temp.x, temp.y);
+				currentShipVector.push_back(temp);
+
+				/*Fleet[i].positions.push_back(temp);
+				myBoard.setShip(temp.x, temp.y);*/
 			}
 		}
 
-		//temp.x = xStart;
-		//temp.y = yStart;
-		//
-		////Tutaj trzeba wypchn¹æ WSZYSTKIE poprawne koordynaty
-		//Fleet[i].positions.push_back(temp);
-	
-		////Tutaj trzeba wypchn¹æ WSZYSTKIE poprawne koordynaty
-		//myBoard.setShip(xStart, yStart);
-		//
-		//if (Fleet[i].shipSize > 1)
-		//	myBoard.setShip(xEnd, yEnd);
+		bool isTaken = 0;
+		for (int i = 0; i<takenPositions.size(); i++) {
+			for (int j = 0; j < currentShipVector.size(); j++) {
+				if ((takenPositions[i].x == currentShipVector[j].x) && (takenPositions[i].y == currentShipVector[j].y)) {
+					isTaken = 1;
+				}
+			}
+		}
+
+		if (isTaken == 1) {
+			std::cout << "statki zachodza na siebie" << std::endl;
+			i--;
+			continue;
+		}
+		else {
+			for (int j = 0; j < currentShipVector.size(); j++) {
+				takenPositions.push_back(currentShipVector[j]);
+				Fleet[i].positions.push_back(currentShipVector[j]);
+				myBoard.setShip(currentShipVector[j].x, currentShipVector[j].y);
+			}
+		}
 	}
 }
 
