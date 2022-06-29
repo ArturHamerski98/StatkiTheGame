@@ -29,29 +29,6 @@ double modul(double x)
 void Player::PlaceShips()
 {
 	
-	
-	/*Dla przypadku statku wiêkszego ni¿ 1 pobieramy 2 koordynaty(pocz¹tek statku, koniec statku)
-	////ZADANIE:
-	. Nale¿y zrobiæ kilka rzeczy:
-	-Sprawdziæ czy aby na pewno mo¿emy dany statek stworzyæ:
-		*Sprawdziæ czy statek nie jest zrobiony po skosie ZROBIONE!
-		*Czy ma odpowiedni¹ d³ugoœæ?(size) np. chcemy stworzyæ statek 4 masztowy. Ktoœ wysy³a nam koordynaty start[0,0] end[0,2].
-		Taki statek ma d³ugoœæ 3 ([0,0][0,1][0,2]) zatem nie mo¿e byæ bo chcemy statek 4 masztowy. start[0][0] end[0][4] akceptujemy bo ma dlugoœc 4
-		PodpowiedŸ: zwróæ uwagê, ¿e ¿eby statek by³ ustawiony pionowo lub poziomo, to musi mieæ albo x albo y takie same np.
-		[3][2] [3][4] -Ok bo x takie samo(3)
-		[3][5] [6][5] -Ok bo y takie samo(5)
-		[3][4]  [5] [6] - Nie ok bo nic takie samo
-		a jego d³ugoœæ to ró¿nica nie takich samych koordynatów + 1
-		ZROBIONE!
-		
-		
-		*Zadanie z gwiazdk¹*:Nie mo¿na umieœciæ 2 statków w tym samym miejscu
-		
-		*#*Zadanie z gwiazdk¹ i hasztagiem*#*: When trying to place two ships next to each other (touching corners are okay), the Ships are
-			too close! Error message is displayed and the program asks again for an input
-
-	*/
-	
 	int xStart, yStart, xEnd = -1, yEnd = -1;
 	coordinates temp;
 	std::vector<coordinates> takenPositions;
@@ -64,11 +41,11 @@ void Player::PlaceShips()
 
 		system("CLS");
 		myBoard.printSea(size);
-		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
+		std::cout << "Ship size: " << Fleet[i].shipSize << std::endl;
 		
-		std::cout << "Podaj x start: ";
+		std::cout << "Input x start coordinate: ";
 		std::cin >> xStart;
-		std::cout << "Podaj y start: ";
+		std::cout << "Input y start coordinate: ";
 		std::cin >> yStart;
 		
 		if (Fleet[i].shipSize == 1) {
@@ -105,14 +82,14 @@ void Player::PlaceShips()
 
 		if (Fleet[i].shipSize > 1)
 		{
-			std::cout << "Podaj x end: ";
+			std::cout << "Input x end coordinate: ";
 			std::cin >> xEnd;
-			std::cout << "Podaj y end: ";
+			std::cout << "Input y end coordinate: ";
 			std::cin >> yEnd;
 		
 			//warunki do sprawdzenia przy wielomasztowcach
 			if ((xEnd < xStart) || (yEnd < yStart)) {
-				std::cout << "Startowe koordynaty musza byc mniejsze" << std::endl;
+				std::cout << "The starting coordinates has to be larger!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -120,7 +97,7 @@ void Player::PlaceShips()
 			}
 			//badamy czy nie po skosie!
 			else if ((xStart != xEnd) && (yStart != yEnd)) {
-				std::cout << "Nie po skosie!" << std::endl;
+				std::cout << "You can not put the ship diagonally!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -128,14 +105,14 @@ void Player::PlaceShips()
 			}
 			//badamy czy odpowiednia długość statku
 			else if ((xStart == xEnd) && (modul(yStart-yEnd)+1 != Fleet[i].shipSize)) {
-				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Check the length!" << std::endl;
 				std::cout << "Try again!" << std::endl; 
 				Sleep(2000);
 				i--;
 				continue;
 			}
 			else if ((yStart == yEnd) && (modul(xStart - xEnd) + 1 != Fleet[i].shipSize)) {
-				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Check the length!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -203,7 +180,7 @@ void Player::PlaceShips()
 		}
 
 		if (isTaken == 1) {
-			std::cout << "statki zachodza na siebie" << std::endl;
+			std::cout << "The ships are too close!" << std::endl;
 			Sleep(2000);
 			i--;
 			continue;
