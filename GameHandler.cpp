@@ -94,4 +94,3 @@ void GameHandler::pVp()
 	std::cout << "Koniec gry";
 }
 
-
