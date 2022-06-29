@@ -6,18 +6,11 @@
 
 int main() {
 
-   // Menu menu;
-    //menu.printMenu();
     GameHandler myGame;
     myGame.getBoardSize();
     myGame.getTurnLimit();
     system("cls");
     myGame.pVp();
-   
-
-
-
-
 
     return 0;
 }
