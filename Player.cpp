@@ -1,6 +1,7 @@
 ﻿#include "Player.h"
 #include <iostream>
 #include "Board.h"
+#include <windows.h>
 
 
 void Player::TakeAShot()
@@ -52,13 +53,14 @@ void Player::PlaceShips()
 	*/
 	
 	int xStart, yStart, xEnd = -1, yEnd = -1;
-	coordinates temp, exact;
+	coordinates temp;
 	std::vector<coordinates> takenPositions;
 	
 
 	for (int i = 0; i < Fleet.size(); i++)
 	{
 		std::vector<coordinates> currentShipVector;
+		std::vector<coordinates> currentShipVectorExtended;
 		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
 		
 		std::cout << "Podaj x start: ";
@@ -75,6 +77,27 @@ void Player::PlaceShips()
 			Fleet[i].positions.push_back(temp);
 
 			myBoard.setShip(xStart, yStart);
+
+			temp.x = xStart +1;
+			temp.y = yStart;
+
+			takenPositions.push_back(temp);
+			temp.x = xStart -1;
+			temp.y = yStart;
+
+			takenPositions.push_back(temp);
+			temp.x = xStart;
+			temp.y = yStart + 1;
+
+			takenPositions.push_back(temp);
+
+			takenPositions.push_back(temp);
+			temp.x = xStart;
+			temp.y = yStart - 1;
+
+			takenPositions.push_back(temp);
+
+			system("CLS");
 			continue;
 		}
 
@@ -113,40 +136,61 @@ void Player::PlaceShips()
 				continue;
 			}
 		}
-
-
-		//umieszczamy wszystkie koordynaty
 		
 		int dif = 0;
 		
-		
+		//poziome statki
 		if (yStart == yEnd) {
 			dif = modul(xStart - xEnd) + 1;
 			for (int i = 0; i < dif; i++) {
 				temp.x = xStart + i;
 				temp.y = yStart;
+
 				currentShipVector.push_back(temp);
 
-				/*Fleet[i].positions.push_back(temp);
-				myBoard.setShip(temp.x, temp.y);*/
+				currentShipVectorExtended.push_back(temp);
+
+				temp.y += 1;
+				currentShipVectorExtended.push_back(temp);
+				temp.y -= 2;
+				currentShipVectorExtended.push_back(temp);
 			}
+			temp.x = xStart - 1;
+			temp.y = yStart;
+			currentShipVectorExtended.push_back(temp);
+
+			temp.x = xEnd + 1;
+			temp.y = yStart;
+			currentShipVectorExtended.push_back(temp);
 		}
+		//pionowe statki
 		else if (xStart == xEnd) {
 			dif = modul(yStart - yEnd) + 1;
 			for (int i = 0; i < dif; i++) {
 				temp.x = xStart;
 				temp.y = yStart + i;
 				currentShipVector.push_back(temp);
+				currentShipVectorExtended.push_back(temp);
 
-				/*Fleet[i].positions.push_back(temp);
-				myBoard.setShip(temp.x, temp.y);*/
+				temp.x += 1;
+				currentShipVectorExtended.push_back(temp);
+				temp.x -= 2;
+				currentShipVectorExtended.push_back(temp);
+
 			}
+			temp.x = xStart;
+			temp.y = yStart-1;
+			currentShipVectorExtended.push_back(temp);
+
+			temp.x = xEnd;
+			temp.y = yEnd+1;
+			currentShipVectorExtended.push_back(temp);
 		}
 
 		bool isTaken = 0;
 		for (int i = 0; i<takenPositions.size(); i++) {
-			for (int j = 0; j < currentShipVector.size(); j++) {
-				if ((takenPositions[i].x == currentShipVector[j].x) && (takenPositions[i].y == currentShipVector[j].y)) {
+			for (int j = 0; j < currentShipVectorExtended.size(); j++) {
+				if ((takenPositions[i].x == currentShipVectorExtended[j].x) && (takenPositions[i].y == currentShipVectorExtended[j].y)) {
 					isTaken = 1;
 				}
 			}
@@ -164,6 +208,9 @@ void Player::PlaceShips()
 				myBoard.setShip(currentShipVector[j].x, currentShipVector[j].y);
 			}
 		}
+		system("CLS");
+
+
 	}
 }
 
