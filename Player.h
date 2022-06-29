@@ -17,6 +17,4 @@ public:
 	void PlaceShips();
 	void PrintPlayerInfo();
 	Player(int size);
-
-
 };

@@ -12,7 +12,6 @@ int Player::enterCoordinate() {
 		std::cout << "Invalid input - negative values are not permitted! Try once again!\n";
 		enterCoordinate();
 	}
-
 	for (int i = 0; number[i] != 0; i++) {
 		if (number[i] > '9' || number[i] < '0') {
 			std::cout << "Invalid input - detected a sign not being a digit! Try once again!\n";
@@ -25,7 +24,6 @@ int Player::enterCoordinate() {
 		enterCoordinate();
 	}
 	return x;
-
 }
 void Player::TakeAShot(Player &enemy)
 {
@@ -51,6 +49,17 @@ void Player::TakeAShot(Player &enemy)
 		std::cout << "You've hit!\n";
 		enemyBoard.setCellValue(x, y, 'H');
 		enemy.myBoard.setCellValue(x, y, 'H');
+		for (int i = 0; i < Fleet.size(); i++) {
+			for (int j = 0; j < 1; j++) {
+				std::cout << Fleet[i].numOfHits;
+				if (Fleet[i].positions[j].x == x && Fleet[i].positions[j].y == y) {
+					Fleet[i].numOfHits++;
+					std::cout << Fleet[i].numOfHits;
+					std::cout << std::endl;
+					std::cout << i << "   " << j;
+				}
+			}
+		}
 		return;
 	}
 
