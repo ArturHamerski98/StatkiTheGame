@@ -6,12 +6,13 @@
 class Player
 {
 protected:
-	std::string name;
+	
 	Board myBoard;
 	Board enemyBoard;
 	int size;
 	std::vector<Ship> Fleet;
 public:
+	std::string name;
 	int enterCoordinate();
 	void TakeAShot(Player &enemy);
 	void PlaceShips();

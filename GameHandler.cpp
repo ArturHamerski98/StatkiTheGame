@@ -28,7 +28,7 @@ int GameHandler::getBoardSize()
 		std::cout << std::endl;
 		BoardSize = x;
 		if (!((x >= 5) && (x <= 10)))
-			std::cout << "Wprowadz rormiar od 5 do 10";
+			std::cout << "Wprowadz rozmiar od 5 do 10";
 	} while (!((x >= 5) && (x <= 10)));
 	setBoardSize(x);
 	return BoardSize;
@@ -66,26 +66,19 @@ void GameHandler::pVp()
 		if (turnLimit % 2 == 0)
 		{
 			std::cout << "Zostalo tur: " << turnLimit << "\n";
-			std::cout << "Podaj x miejsca strzalu: \n";
-
-			std::cout << "Podaj y miejsca strzalu: \n";
-
+			std::cout << "Teraz gra:" << player1.name;
 			player1.TakeAShot(player2);
-			//std::cout << "strzela p1 ";
+			player1.PrintPlayerInfo();
 			turnLimit--;
-
 			Sleep(3000);
 			system("cls");
 		}
 		else
 		{
 			std::cout << "Zostalo tur: " << turnLimit << "\n";
-			std::cout << "Podaj x miejsca strzalu: \n";
-
-			std::cout << "Podaj y miejsca strzalu: \n";
-
-			player2.TakeAShot(player2);
-			//std::cout << "strzela p2";
+			std::cout <<"Teraz gra:"<< player2.name;
+			player2.TakeAShot(player1);
+			player2.PrintPlayerInfo();
 			turnLimit--;
 			Sleep(3000);
 			system("cls");
