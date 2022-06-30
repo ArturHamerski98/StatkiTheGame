@@ -57,30 +57,36 @@ void GameHandler::pVp()
     system("cls");
    
 
+	while (turnLimit > 0) {
+		if (turnLimit % 2 == 0)
+		{
+			std::cout << "Zostalo tur: " << turnLimit << "\n";
+			std::cout << "Podaj x miejsca strzalu: \n";
 
-    while (turnLimit > 0) {
-        if (turnLimit % 2 == 0)
-        {
-            std::cout << "Zostalo tur: " << turnLimit << "\n";
-            std::cout << "Teraz gra:"; player1.printName(); std::cout << "\n";
-            player1.PrintPlayerInfo();
-            player1.TakeAShot(player2);
-           
-            turnLimit--;
-            Sleep(3000);
-            system("cls");
-        }
-        else
-        {
-            std::cout << "Zostalo tur: " << turnLimit << "\n";
-            std::cout << "Teraz gra:"; player2.printName(); std::cout << "\n";
-            player2.PrintPlayerInfo();
-            player2.TakeAShot(player1);
-            
-            turnLimit--;
-            Sleep(3000);
-            system("cls");
-        }
-    }
-    std::cout << "Koniec gry";
+			std::cout << "Podaj y miejsca strzalu: \n";
+
+			player1.TakeAShot(player2);
+			//std::cout << "strzela p1 ";
+			turnLimit--;
+
+			Sleep(3000);
+			system("cls");
+		}
+		else
+		{
+			std::cout << "Zostalo tur: " << turnLimit << "\n";
+			std::cout << "Podaj x miejsca strzalu: \n";
+
+			std::cout << "Podaj y miejsca strzalu: \n";
+
+			player2.TakeAShot(player2);
+			//std::cout << "strzela p2";
+			turnLimit--;
+			Sleep(3000);
+			system("cls");
+		}
+	}
+	std::cout << "Koniec gry";
 }
+
+
