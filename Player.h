@@ -18,6 +18,4 @@ public:
 	void PrintPlayerInfo();
 	void printName();
 	Player(int size);
-
-
 };
