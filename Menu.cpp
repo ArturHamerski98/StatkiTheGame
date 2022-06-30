@@ -1,10 +1,11 @@
 #include "Menu.h"
 #include <iostream>
 
-void Menu::setBoardSize(int bs)
+void Menu::printMenu()
 {
-    BoardSize = bs;
 }
+
+=======
 
 void  Menu::printMenu()
 {

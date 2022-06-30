@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Board.h"
 #include <string>
+#include <windows.h>
 
 int Player::enterCoordinate() {
 	std::string number;
@@ -25,7 +26,7 @@ int Player::enterCoordinate() {
 	}
 	return x;
 }
-void Player::TakeAShot(Player &enemy)
+void Player::TakeAShot(Player& enemy)
 {
 	int x, y;
 	std::cout << "Specify the X-coordinate of the area you want to shoot: ";
@@ -39,7 +40,7 @@ void Player::TakeAShot(Player &enemy)
 		return;
 	}
 
-	if (enemy.myBoard.getCellValue(x,y) == '0') {
+	if (enemy.myBoard.getCellValue(x, y) == '0') {
 		std::cout << "You've missed!\n";
 		enemyBoard.setCellValue(x, y, 'M');
 		enemy.myBoard.setCellValue(x, y, 'M');
@@ -50,18 +51,25 @@ void Player::TakeAShot(Player &enemy)
 		enemyBoard.setCellValue(x, y, 'H');
 		enemy.myBoard.setCellValue(x, y, 'H');
 		for (int i = 0; i < Fleet.size(); i++) {
-			for (int j = 0; j < 1; j++) {
-				std::cout << Fleet[i].numOfHits;
+
+			for (int j = 0; j < Fleet[i].shipSize; j++) {
 				if (Fleet[i].positions[j].x == x && Fleet[i].positions[j].y == y) {
 					Fleet[i].numOfHits++;
-					std::cout << Fleet[i].numOfHits;
-					std::cout << std::endl;
-					std::cout << i << "   " << j;
+					if (Fleet[i].numOfHits == Fleet[i].shipSize) {
+						std::cout << "Ship sunk!";
+						Fleet[i].status = 1;
+						for (int k = 0; k < Fleet[i].shipSize; k++) {
+							enemyBoard.setCellValue(Fleet[i].positions[k].x, Fleet[i].positions[k].y, 'S');
+							enemy.myBoard.setCellValue(Fleet[i].positions[k].x, Fleet[i].positions[k].y, 'S');
+						}
+					}
+
 				}
 			}
 		}
 		return;
 	}
+	
 
 
 
@@ -79,44 +87,65 @@ void Player::TakeAShot(Player &enemy)
 
 	*/
 }
-
+double modul(double x)
+{
+	//wykorzystanie trójargumentowego operatora
+	return x < 0 ? -x : x;
+}
 void Player::PlaceShips()
 {
 	
 	
-	/*Dla przypadku statku większego niż 1 pobieramy 2 koordynaty(początek statku, koniec statku)
-	////ZADANIE:
-	. Należy zrobić kilka rzeczy:
-	-Sprawdzić czy aby na pewno możemy dany statek stworzyć:
-		*Sprawdzić czy statek nie jest zrobiony po skosie
-		*Czy ma odpowiednią długość?(size) np. chcemy stworzyć statek 4 masztowy. Ktoś wysyła nam koordynaty start[0,0] end[0,2].
-		Taki statek ma długość 3 ([0,0][0,1][0,2]) zatem nie może być bo chcemy statek 4 masztowy. start[0][0] end[0][4] akceptujemy bo ma dlugośc 4
-		Podpowiedź: zwróć uwagę, że żeby statek był ustawiony pionowo lub poziomo, to musi mieć albo x albo y takie same np.
-		[3][2] [3][4] -Ok bo x takie samo(3)
-		[3][5] [6][5] -Ok bo y takie samo(5)
-		[3][4]  [5] [6] - Nie ok bo nic takie samo
-		a jego długość to różnica nie takich samych koordynatów + 1
-
-		
-		
-		*Zadanie z gwiazdką*:Nie można umieścić 2 statków w tym samym miejscu
-		
-		*#*Zadanie z gwiazdką i hasztagiem*#*: When trying to place two ships next to each other (touching corners are okay), the Ships are
-			too close! Error message is displayed and the program asks again for an input
-
-
-	*/
-	
-	int xStart, yStart, xEnd, yEnd;
+	int xStart, yStart, xEnd = -1, yEnd = -1;
 	coordinates temp;
+	std::vector<coordinates> takenPositions;
+
+
 	for (int i = 0; i < Fleet.size(); i++)
 	{
+		std::vector<coordinates> currentShipVector;
+		std::vector<coordinates> currentShipVectorExtended;
+
+		system("CLS");
+		myBoard.printSea(size);
 		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
-		
+
 		std::cout << "Podaj x start: ";
 		std::cin >> xStart;
 		std::cout << "Podaj y start: ";
 		std::cin >> yStart;
+
+		if (Fleet[i].shipSize == 1) {
+			temp.x = xStart;
+			temp.y = yStart;
+
+			takenPositions.push_back(temp);
+
+			Fleet[i].positions.push_back(temp);
+
+			myBoard.setCellValue(xStart, yStart,'1');
+
+			temp.x = xStart + 1;
+			temp.y = yStart;
+
+			takenPositions.push_back(temp);
+			temp.x = xStart - 1;
+			temp.y = yStart;
+
+			takenPositions.push_back(temp);
+			temp.x = xStart;
+			temp.y = yStart + 1;
+
+			takenPositions.push_back(temp);
+
+			takenPositions.push_back(temp);
+			temp.x = xStart;
+			temp.y = yStart - 1;
+
+			takenPositions.push_back(temp);
+
+			continue;
+		}
 
 		if (Fleet[i].shipSize > 1)
 		{
@@ -124,33 +153,131 @@ void Player::PlaceShips()
 			std::cin >> xEnd;
 			std::cout << "Podaj y end: ";
 			std::cin >> yEnd;
+
+			//warunki do sprawdzenia przy wielomasztowcach
+			if ((xEnd < xStart) || (yEnd < yStart)) {
+				std::cout << "Startowe koordynaty musza byc mniejsze" << std::endl;
+				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
+				i--;
+				continue;
+			}
+			//badamy czy nie po skosie!
+			else if ((xStart != xEnd) && (yStart != yEnd)) {
+				std::cout << "Nie po skosie!" << std::endl;
+				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
+				i--;
+				continue;
+			}
+			//badamy czy odpowiednia długość statku
+			else if ((xStart == xEnd) && (modul(yStart - yEnd) + 1 != Fleet[i].shipSize)) {
+				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
+				i--;
+				continue;
+			}
+			else if ((yStart == yEnd) && (modul(xStart - xEnd) + 1 != Fleet[i].shipSize)) {
+				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Try again!" << std::endl;
+				Sleep(2000);
+				i--;
+				continue;
+			}
+		}
+
+		int dif = 0;
+
+		//poziome statki
+		if (yStart == yEnd) {
+			dif = modul(xStart - xEnd) + 1;
+			for (int i = 0; i < dif; i++) {
+				temp.x = xStart + i;
+				temp.y = yStart;
+
+				currentShipVector.push_back(temp);
+
+				currentShipVectorExtended.push_back(temp);
+
+				temp.y += 1;
+				currentShipVectorExtended.push_back(temp);
+				temp.y -= 2;
+				currentShipVectorExtended.push_back(temp);
+			}
+			temp.x = xStart - 1;
+			temp.y = yStart;
+			currentShipVectorExtended.push_back(temp);
+
+			temp.x = xEnd + 1;
+			temp.y = yStart;
+			currentShipVectorExtended.push_back(temp);
+		}
+		//pionowe statki
+		else if (xStart == xEnd) {
+			dif = modul(yStart - yEnd) + 1;
+			for (int i = 0; i < dif; i++) {
+				temp.x = xStart;
+				temp.y = yStart + i;
+				currentShipVector.push_back(temp);
+				currentShipVectorExtended.push_back(temp);
+
+				temp.x += 1;
+				currentShipVectorExtended.push_back(temp);
+				temp.x -= 2;
+				currentShipVectorExtended.push_back(temp);
+
+			}
+			temp.x = xStart;
+			temp.y = yStart - 1;
+			currentShipVectorExtended.push_back(temp);
+
+			temp.x = xEnd;
+			temp.y = yEnd + 1;
+			currentShipVectorExtended.push_back(temp);
+		}
+
+		bool isTaken = 0;
+		for (int i = 0; i < takenPositions.size(); i++) {
+			for (int j = 0; j < currentShipVectorExtended.size(); j++) {
+				if ((takenPositions[i].x == currentShipVectorExtended[j].x) && (takenPositions[i].y == currentShipVectorExtended[j].y)) {
+					isTaken = 1;
+				}
+			}
+		}
+
+		if (isTaken == 1) {
+			std::cout << "statki zachodza na siebie" << std::endl;
+			Sleep(2000);
+			i--;
+			continue;
+		}
+		else {
+			for (int j = 0; j < currentShipVector.size(); j++) {
+				takenPositions.push_back(currentShipVector[j]);
+				Fleet[i].positions.push_back(currentShipVector[j]);
+				myBoard.setCellValue(currentShipVector[j].x, currentShipVector[j].y,'1');
+			}
 		}
 		
-		
-		temp.x = xStart;
-		temp.y = yStart;
-		
-		//Tutaj trzeba wypchnąć WSZYSTKIE poprawne koordynaty
-		Fleet[i].positions.push_back(temp);
-	
-		//Tutaj trzeba wypchnąć WSZYSTKIE poprawne koordynaty
-		myBoard.setCellValue(xStart, yStart,'1');
-		
-		if (Fleet[i].shipSize > 1)
-			myBoard.setCellValue(xEnd, yEnd,'1');
-
 	}
-
+	system("CLS");
+	myBoard.printSea(size);
+	Sleep(2000);
 
 }
 
 void Player::PrintPlayerInfo()
 {
-	std::cout << name<<std::endl;
+	std::cout << "    My sea" << std::endl;
 	myBoard.printSea(size);
-	std::cout << "\n\n";
+	std::cout << "\n\n    Enemy sea\n";
 	enemyBoard.printSea(size);
 
+}
+void Player::printName()
+{
+	std::cout << name;
 }
 Player::Player(int size)
 {

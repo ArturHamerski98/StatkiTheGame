@@ -16,5 +16,6 @@ public:
 	void TakeAShot(Player &enemy);
 	void PlaceShips();
 	void PrintPlayerInfo();
+	void printName();
 	Player(int size);
 };
