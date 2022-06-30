@@ -35,7 +35,7 @@ void Board::printSea(int size)
 			std::cout << i << " ";
 
 		for (int j = 0; j < size; j++) {
-			std::cout << Sea[i][j] << " ";
+			std::cout << Sea[j][i] << " ";
 		}
 		std::cout << std::endl;
 	}

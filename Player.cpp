@@ -4,36 +4,49 @@
 #include <string>
 #include <windows.h>
 
-int Player::enterCoordinate() {
-	std::string number;
-	std::cin >> number;
 
-	//checking for negative numbers
-	if (number[0] == '-') {
-		std::cout << "Invalid input - negative values are not permitted! Try once again!\n";
-		enterCoordinate();
-	}
-	for (int i = 0; number[i] != 0; i++) {
-		if (number[i] > '9' || number[i] < '0') {
-			std::cout << "Invalid input - detected a sign not being a digit! Try once again!\n";
-			enterCoordinate();
+
+int Player::enterXCoordinate(int numberOfLetters) {
+	char x;//metoda pobiera litere kolumny, nie pozwala wyjsc za obszar planszy
+	int col;
+	numberOfLetters = 'A' + numberOfLetters;
+	while (true) {
+		std::cin >> x;
+		x = toupper(x);
+		if ((x < 'A') || (x >= numberOfLetters)) {
+			std::cout << "Input a proper letter! ";
+			continue;
 		}
+		col = x - 'A';
+		return col;
+
 	}
-	int x = stoi(number);
-	if (x > size) {
-		std::cout << "Swum overboard! Try once again";
-		enterCoordinate();
+}
+
+int Player::enterYCoordinate(int rowNumber) {
+	int y; //metoda pobiera numer wiersza, nie pozwala wyjsc za obszar planszy
+	while (true) {
+		if (!(std::cin >> y)) {
+			std::cout << "Input a proper number! ";
+			std::cin.clear();
+			std::cin.ignore();
+			continue;
+		}
+		else if ((y > rowNumber - 1) || (y < 0)) {
+			std::cout << "Input a proper number! ";
+			continue;
+		}
+		return y;
 	}
-	return x;
 }
 void Player::TakeAShot(Player& enemy)
-{
+{	
 	int x, y;
 	std::cout << "Specify the X-coordinate of the area you want to shoot: ";
-	x = enterCoordinate();
+	x = enterXCoordinate(size);
 
 	std::cout << "Specify the Y-coordinate of the area you want to shoot: ";
-	y = enterCoordinate();
+	y = enterYCoordinate(size);
 
 	if (enemyBoard.getCellValue(x, y) != '0') {
 		std::cout << "You've missed!\n";
@@ -70,32 +83,16 @@ void Player::TakeAShot(Player& enemy)
 		return;
 	}
 	
-
-
-
-
-	/*ZADANIE:
-	-gracz1 podaje koordynaty
-	-sprawdzamy czy koordynaty nie przekraczaj¹ rozmiaru planszy, albo czy czy zamiast cyfry gracz1 nie wpisa³ eloelo320
-	-jesli koordynaty bledne to prosimy zeby wpisal jeszcze raz
-	-jesli koordynaty prawidlowe to w pierwszej kolejnosci sprawdzamy czy gracz ju¿ nie strzela³ w to miejsce, jeœli tak, to informujemy go ¿e miss
-	i przerywamy pêtle(tura nastêpnego gracza)
-	-jesli koordynaty prawidlowe to sprawdzamy co znajduje siê pod dan¹ pozycj¹ w myBoard gracza2
-	-Jeœli trafimy to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'H'
-	-Jeœli nie trafimy, to na Enemyboard gracza1 oraz myBoard Gracza 2 pod dan¹ pozycj¹ piszemy 'M'
-	
-
-	*/
 }
 double modul(double x)
 {
+	//funkcja zwraca wartosc bezwzgledna
 	//wykorzystanie trójargumentowego operatora
 	return x < 0 ? -x : x;
 }
 void Player::PlaceShips()
 {
-	
-	
+	//umieszaczanie statkow na mapie
 	int xStart, yStart, xEnd = -1, yEnd = -1;
 	coordinates temp;
 	std::vector<coordinates> takenPositions;
@@ -103,17 +100,17 @@ void Player::PlaceShips()
 
 	for (int i = 0; i < Fleet.size(); i++)
 	{
-		std::vector<coordinates> currentShipVector;
-		std::vector<coordinates> currentShipVectorExtended;
+		std::vector<coordinates> currentShipVector; //wektor przechowuje koordynaty obecnie umieszczanego statku
+		std::vector<coordinates> currentShipVectorExtended; //wektor przechowuje koordynaty obecnie umieszczanego statku oraz pol dookola niego
 
 		system("CLS");
 		myBoard.printSea(size);
-		std::cout << "Statek o rozmiarze " << Fleet[i].shipSize << std::endl;
+		std::cout << "Ship size " << Fleet[i].shipSize << std::endl;
 
-		std::cout << "Podaj x start: ";
-		std::cin >> xStart;
-		std::cout << "Podaj y start: ";
-		std::cin >> yStart;
+		std::cout << "Enter x start coordinate: ";
+		xStart = enterXCoordinate(size);
+		std::cout << "Enter y start coordinate: ";
+		yStart = enterYCoordinate(size);
 
 		if (Fleet[i].shipSize == 1) {
 			temp.x = xStart;
@@ -138,7 +135,6 @@ void Player::PlaceShips()
 
 			takenPositions.push_back(temp);
 
-			takenPositions.push_back(temp);
 			temp.x = xStart;
 			temp.y = yStart - 1;
 
@@ -149,14 +145,15 @@ void Player::PlaceShips()
 
 		if (Fleet[i].shipSize > 1)
 		{
-			std::cout << "Podaj x end: ";
-			std::cin >> xEnd;
-			std::cout << "Podaj y end: ";
-			std::cin >> yEnd;
+			std::cout << "Enter x End coordinates: ";
+			xEnd = enterXCoordinate(size);
+			std::cout << "Enter y End coordinates: ";
+			yEnd = enterYCoordinate(size);
 
 			//warunki do sprawdzenia przy wielomasztowcach
+			//sprawdzamy czy koordynaty sa podane od lewej do prawej
 			if ((xEnd < xStart) || (yEnd < yStart)) {
-				std::cout << "Startowe koordynaty musza byc mniejsze" << std::endl;
+				std::cout << "The starting coordinates has to be larger!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -164,7 +161,7 @@ void Player::PlaceShips()
 			}
 			//badamy czy nie po skosie!
 			else if ((xStart != xEnd) && (yStart != yEnd)) {
-				std::cout << "Nie po skosie!" << std::endl;
+				std::cout << "You can not put ships diagonally!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -172,14 +169,14 @@ void Player::PlaceShips()
 			}
 			//badamy czy odpowiednia długość statku
 			else if ((xStart == xEnd) && (modul(yStart - yEnd) + 1 != Fleet[i].shipSize)) {
-				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Check the length of the ship!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
 				continue;
 			}
 			else if ((yStart == yEnd) && (modul(xStart - xEnd) + 1 != Fleet[i].shipSize)) {
-				std::cout << "Nie ta dlugosc!" << std::endl;
+				std::cout << "Check the length of the ship!" << std::endl;
 				std::cout << "Try again!" << std::endl;
 				Sleep(2000);
 				i--;
@@ -188,7 +185,7 @@ void Player::PlaceShips()
 		}
 
 		int dif = 0;
-
+		//umieszczanie pozycji w wektorach:
 		//poziome statki
 		if (yStart == yEnd) {
 			dif = modul(xStart - xEnd) + 1;
@@ -236,7 +233,7 @@ void Player::PlaceShips()
 			temp.y = yEnd + 1;
 			currentShipVectorExtended.push_back(temp);
 		}
-
+		//sprawdzamy czy istnieje mozliwosc umieszczenia statku w tym miejscu
 		bool isTaken = 0;
 		for (int i = 0; i < takenPositions.size(); i++) {
 			for (int j = 0; j < currentShipVectorExtended.size(); j++) {
@@ -247,12 +244,12 @@ void Player::PlaceShips()
 		}
 
 		if (isTaken == 1) {
-			std::cout << "statki zachodza na siebie" << std::endl;
+			std::cout << "The ships are too close!" << std::endl;
 			Sleep(2000);
 			i--;
 			continue;
 		}
-		else {
+		else {//umieszczenie statku na mapie
 			for (int j = 0; j < currentShipVector.size(); j++) {
 				takenPositions.push_back(currentShipVector[j]);
 				Fleet[i].positions.push_back(currentShipVector[j]);
