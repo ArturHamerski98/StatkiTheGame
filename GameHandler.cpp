@@ -61,25 +61,21 @@ void GameHandler::pVp()
 		if (turnLimit % 2 == 0)
 		{
 			std::cout << "Zostalo tur: " << turnLimit << "\n";
-			std::cout << "Podaj x miejsca strzalu: \n";
-
-			std::cout << "Podaj y miejsca strzalu: \n";
-
+		
+            player1.PrintPlayerInfo();
 			player1.TakeAShot(player2);
 			//std::cout << "strzela p1 ";
 			turnLimit--;
-
+         
 			Sleep(3000);
 			system("cls");
 		}
 		else
 		{
 			std::cout << "Zostalo tur: " << turnLimit << "\n";
-			std::cout << "Podaj x miejsca strzalu: \n";
-
-			std::cout << "Podaj y miejsca strzalu: \n";
-
-			player2.TakeAShot(player2);
+			
+            player2.PrintPlayerInfo();
+			player2.TakeAShot(player1);
 			//std::cout << "strzela p2";
 			turnLimit--;
 			Sleep(3000);

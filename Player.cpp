@@ -53,18 +53,23 @@ void Player::TakeAShot(Player& enemy)
 		enemyBoard.setCellValue(x, y, 'H');
 		enemy.myBoard.setCellValue(x, y, 'H');
 		for (int i = 0; i < Fleet.size(); i++) {
-			for (int j = 0; j < 1; j++) {
-				std::cout << Fleet[i].numOfHits;
+			for (int j = 0; j < Fleet[i].shipSize; j++) {
 				if (Fleet[i].positions[j].x == x && Fleet[i].positions[j].y == y) {
 					Fleet[i].numOfHits++;
-					std::cout << Fleet[i].numOfHits;
-					std::cout << std::endl;
-					std::cout << i << "   " << j;
+					if (Fleet[i].numOfHits == Fleet[i].shipSize) {
+						std::cout << "Ship sunk!";
+						Fleet[i].status = 1;
+						for (int k = 0; k < Fleet[i].shipSize; k++) {
+							enemyBoard.setCellValue(Fleet[i].positions[k].x, Fleet[i].positions[k].y, 'S');
+							enemy.myBoard.setCellValue(Fleet[i].positions[k].x, Fleet[i].positions[k].y, 'S');
+						}
+					}
 				}
 			}
 		}
 		return;
 	}
+	
 
 
 
@@ -288,8 +293,8 @@ Player::Player(int size)
 	enemyBoard = Board(size);
 	Fleet.push_back(Ship(1));
 	Fleet.push_back(Ship(2));
-	Fleet.push_back(Ship(3));
-	Fleet.push_back(Ship(4));
+	//Fleet.push_back(Ship(3));
+	//Fleet.push_back(Ship(4));
 	
 
 
