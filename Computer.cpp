@@ -1,51 +1,130 @@
-ï»¿#include "Player.h"
-#include <iostream>
-#include "Board.h"
-#include <string>
-#include <windows.h>
+#include "Computer.h"
+#include "Player.h"
 #include "Menu.h"
+#include <windows.h>
 
+Computer::Computer(int size) {
 
-int Player::enterXCoordinate(int numberOfLetters) {
-    char x; //metoda pobiera litere kolumny, nie pozwala wyjsc za obszar planszy
-    int col;
-    numberOfLetters = 'A' + numberOfLetters;
-    while (true) {
-        std::cin >> x;
-        x = toupper(x);
-        if ((x < 'A') || (x >= numberOfLetters)) {
-            std::cout << "Input a proper letter! ";
-            continue;
-        }
-        col = x - 'A';
-        return col;
+    name = "Computer";
+    this->size = size;
 
-    }
+    myBoard = Board(size);
+    enemyBoard = Board(size);
+    Fleet.push_back(Ship(1));
+    Fleet.push_back(Ship(2));
+    Fleet.push_back(Ship(3));
+    Fleet.push_back(Ship(4));
 }
 
-int Player::enterYCoordinate(int rowNumber) {
-    int y; //metoda pobiera numer wiersza, nie pozwala wyjsc za obszar planszy
-    while (true) {
-        if (!(std::cin >> y)) {
-            std::cout << "Input a proper number! ";
-            std::cin.clear();
-            std::cin.ignore();
-            continue;
-        }
-        else if ((y > rowNumber - 1) || (y < 0)) {
-            std::cout << "Input a proper number! ";
-            continue;
-        }
-        return y;
-    }
-}
-void Player::TakeAShot(Player& enemy) {
+Computer::Computer() {}
+void Computer::TakeAShot(Player& enemy) {
     int x, y;
-    std::cout << "Specify the X-coordinate of the area you want to shoot: ";
-    x = enterXCoordinate(size);
 
-    std::cout << "Specify the Y-coordinate of the area you want to shoot: ";
-    y = enterYCoordinate(size);
+    if (plansOfWar.size() == 0) {
+        bool temp = 0;
+        do {
+
+            x = rand() % size;
+            y = rand() % size;
+            temp = 0;
+
+            for (int i = 0; i < shootPositions.size(); i++) {
+                if (shootPositions[i].x == x && shootPositions[i].y == y)
+                    temp = 1;
+            }
+
+        } while (temp == 1);
+
+    }
+    else {
+
+        bool temp2;
+        do {
+            temp2 = 0;
+            if (plansOfWar.back().direction == 0) {
+                x = plansOfWar.back().hitedShip.x + 1;
+                y = plansOfWar.back().hitedShip.y;
+                if (x >= size) {
+                    temp2 = 1;
+                    plansOfWar.back().direction++;
+                }
+                else {
+                    for (int i = 0; i < shootPositions.size(); i++) {
+                        if (shootPositions[i].x == x && shootPositions[i].y == y) {
+                            temp2 = 1;
+                            plansOfWar.back().direction++;
+                        }
+
+                    }
+                }
+
+            }
+            else if (plansOfWar.back().direction == 1) {
+                x = plansOfWar.back().hitedShip.x - 1;
+                y = plansOfWar.back().hitedShip.y;
+                if (x < 0) {
+                    temp2 = 1;
+                    plansOfWar.back().direction++;
+                }
+                else {
+                    for (int i = 0; i < shootPositions.size(); i++) {
+                        if (shootPositions[i].x == x && shootPositions[i].y == y) {
+                            temp2 = 1;
+                            plansOfWar.back().direction++;
+                        }
+
+                    }
+                }
+
+            }
+            else if (plansOfWar.back().direction == 2) {
+                x = plansOfWar.back().hitedShip.x;
+                y = plansOfWar.back().hitedShip.y + 1;
+                if (y >= size) {
+                    temp2 = 1;
+                    plansOfWar.back().direction++;
+                }
+                else {
+                    for (int i = 0; i < shootPositions.size(); i++) {
+                        if (shootPositions[i].x == x && shootPositions[i].y == y) {
+                            temp2 = 1;
+                            plansOfWar.back().direction++;
+                        }
+
+                    }
+                }
+            }
+            else if (plansOfWar.back().direction == 3) {
+                x = plansOfWar.back().hitedShip.x;
+                y = plansOfWar.back().hitedShip.y - 1;
+                if (y < 0) {
+                    temp2 = 1;
+                    plansOfWar.back().direction++;
+                }
+                else {
+                    for (int i = 0; i < shootPositions.size(); i++) {
+                        if (shootPositions[i].x == x && shootPositions[i].y == y) {
+                            temp2 = 1;
+                            plansOfWar.back().direction++;
+                        }
+
+                    }
+                }
+            }
+            else {
+
+                plansOfWar.push_back(plansOfWar.at(0));
+
+            }
+
+        } while (temp2 == 1);
+        plansOfWar.back().direction++;
+    }
+
+    shootPositions.push_back(coordinates{
+      x,
+      y
+        });
 
     if (enemyBoard.getCellValue(x, y) != '0') {
         std::cout << "You've missed!\n";
@@ -56,34 +135,59 @@ void Player::TakeAShot(Player& enemy) {
         system("Color 80");
         Sleep(250);
         system("Color 30");
+        if (plansOfWar.size() > 1) {
+            plansOfWar.push_back(plansOfWar.at(0));
+
+        }
         return;
     }
 
     if (enemy.myBoard.getCellValue(x, y) == '0') {
         std::cout << "You've missed!\n";
-        system("Color 80");
-        Sleep(250);
-        system("Color 30");
-        Sleep(250);
-        system("Color 80");
-        Sleep(250);
-        system("Color 30");
         enemyBoard.setCellValue(x, y, 'M');
         enemy.myBoard.setCellValue(x, y, 'M');
+        system("Color 80");
+        Sleep(250);
+        system("Color 30");
+        Sleep(250);
+        system("Color 80");
+        Sleep(250);
+        system("Color 30");
+        if (plansOfWar.size() > 1) {
+            plansOfWar.push_back(planOfWar{
+              plansOfWar.at(0).hitedShip, plansOfWar.back().direction
+                });
+
+        }
         return;
     }
     else {
         std::cout << "You've hit!\n";
         enemyBoard.setCellValue(x, y, 'H');
         enemy.myBoard.setCellValue(x, y, 'H');
+        if (plansOfWar.size() == 0)
+            plansOfWar.push_back(planOfWar{
+              coordinates {
+                x,
+                y
+              }, 0
+                });
+        else
+            plansOfWar.push_back(planOfWar{
+              coordinates {
+                x,
+                y
+              }, plansOfWar.back().direction - 1
+                });
         for (int i = 0; i < enemy.Fleet.size(); i++) {
 
             for (int j = 0; j < enemy.Fleet[i].shipSize; j++) {
                 if (enemy.Fleet[i].positions[j].x == x && enemy.Fleet[i].positions[j].y == y) {
                     enemy.Fleet[i].numOfHits++;
-                    
+
                     if (enemy.Fleet[i].numOfHits == enemy.Fleet[i].shipSize) {
                         std::cout << "Ship sunk!";
+                        plansOfWar.clear();
                         system("Color 07");
                         Sleep(250);
                         system("Color 30");
@@ -104,17 +208,15 @@ void Player::TakeAShot(Player& enemy) {
                         system("cls");
                         enemyBoard.printSea(size);
                         std::cout << "\nCongratulations! " << name << " wins!";
-                        
-                        for (int q=0; q < 10; q++)
-                        {
+
+                        for (int q = 0; q < 10; q++) {
                             system("Color 60");
                             Sleep(250);
                             system("Color 30");
                             Sleep(250);
 
                         }
-                        
-                       
+
                         system("cls");
                         Menu::printMenu();
 
@@ -132,10 +234,10 @@ void Player::TakeAShot(Player& enemy) {
         system("Color 30");
         return;
     }
-   
 
 }
-void Player::PlaceShips() {
+
+void Computer::PlaceShips() {
     //umieszaczanie statkow na mapie
     int xStart, yStart, xEnd = -1, yEnd = -1;
     coordinates temp;
@@ -146,13 +248,9 @@ void Player::PlaceShips() {
         std::vector < coordinates > currentShipVectorExtended; //wektor przechowuje koordynaty obecnie umieszczanego statku oraz pol dookola niego
 
         system("CLS");
-        myBoard.printSea(size);
-        std::cout << "Ship size " << Fleet[i].shipSize << std::endl;
-
-        std::cout << "Enter x start coordinate: ";
-        xStart = enterXCoordinate(size);
-        std::cout << "Enter y start coordinate: ";
-        yStart = enterYCoordinate(size);
+        
+        xStart = rand() % size;
+        yStart = rand() % size;
 
         if (Fleet[i].shipSize == 1) {
             temp.x = xStart;
@@ -168,13 +266,31 @@ void Player::PlaceShips() {
         }
 
         if (Fleet[i].shipSize > 1) {
-            std::cout << "Enter x End coordinates: ";
-            xEnd = enterXCoordinate(size);
-            std::cout << "Enter y End coordinates: ";
-            yEnd = enterYCoordinate(size);
+
+            if (rand() % 2 == 0) {
+                xEnd = xStart;
+                yEnd = yStart + Fleet[i].shipSize - 1;
+
+                if (yEnd >= size) {
+                    i--;
+                    continue;
+
+                }
+
+            }
+            else {
+                xEnd = xStart + Fleet[i].shipSize - 1;
+                yEnd = yStart;
+
+                if (xEnd >= size) {
+                    i--;
+                    continue;
+                }
+
+            }
 
             //warunki do sprawdzenia przy wielomasztowcach
-            //sprawdzamy czy koordynaty sa podane od lewej do prawej, jeÅ›li nie - zamieniamy je miejscami
+            //sprawdzamy czy koordynaty sa podane od lewej do prawej, jeœli nie - zamieniamy je miejscami
             if (xStart + yStart > xEnd + yEnd) {
                 int tempXStart = xStart;
                 int tempYStart = yStart;
@@ -187,24 +303,18 @@ void Player::PlaceShips() {
 
             //badamy czy nie po skosie!
             else if ((xStart != xEnd) && (yStart != yEnd)) {
-                std::cout << "You can not put ships diagonally!" << std::endl;
-                std::cout << "Try again!" << std::endl;
-                Sleep(2000);
+
                 i--;
                 continue;
             }
-            //badamy czy odpowiednia dÅ‚ugoÅ›Ä‡ statku
+            //badamy czy odpowiednia d³ugoœæ statku
             else if ((xStart == xEnd) && (-(yStart - yEnd) + 1 != Fleet[i].shipSize)) {
-                std::cout << "Check the length of the ship!" << std::endl;
-                std::cout << "Try again!" << std::endl;
-                Sleep(2000);
+
                 i--;
                 continue;
             }
             else if ((yStart == yEnd) && (-(xStart - xEnd) + 1 != Fleet[i].shipSize)) {
-                std::cout << "Check the length of the ship!" << std::endl;
-                std::cout << "Try again!" << std::endl;
-                Sleep(2000);
+
                 i--;
                 continue;
             }
@@ -270,8 +380,7 @@ void Player::PlaceShips() {
         }
 
         if (isTaken == 1) {
-            std::cout << "The ships are too close!" << std::endl;
-            Sleep(2000);
+
             i--;
             continue;
         }
@@ -287,34 +396,6 @@ void Player::PlaceShips() {
     system("CLS");
     std::cout << name << "'s fleet\n";
     myBoard.printSea(size);
-    Sleep(2000);
-
-}
-
-void Player::PrintPlayerInterface() {
-    std::cout << "    My sea" << std::endl;
-    myBoard.printSea(size);
-    std::cout << "\n\n    Enemy sea\n";
-    enemyBoard.printSea(size);
-
-}
-void Player::printName() {
-    std::cout << name;
-}
-Player::Player(){}
-Player::Player(int size) {
-
-    std::string name;
-    std::cout << "Enter youre name: ";
-    std::cin >> name;
-    this->name = name;
-    this->size = size;
-
-    myBoard = Board(size);
-    enemyBoard = Board(size);
-    Fleet.push_back(Ship(1));
-    Fleet.push_back(Ship(2));
-    Fleet.push_back(Ship(3));
-    Fleet.push_back(Ship(4));
+    Sleep(5000);
 
 }
