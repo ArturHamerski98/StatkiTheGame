@@ -3,19 +3,23 @@
 #include "Board.h"
 #include <vector>
 #include "Ship.h"
-class Player
-{
+
+class Player {
 protected:
-	std::string name;
-	Board myBoard;
-	Board enemyBoard;
-	int size;
-	std::vector<Ship> Fleet;
+    std::string name;
+    Board enemyBoard;
+    int size;
+    int enterXCoordinate(int NumberOfLetters);
+    int enterYCoordinate(int rowNumber);
+  
+
 public:
-	int enterCoordinate();
-	void TakeAShot(Player &enemy);
-	void PlaceShips();
-	void PrintPlayerInfo();
-	void printName();
-	Player(int size);
+    void TakeAShot(Player& enemy);
+    void PlaceShips();
+    void PrintPlayerInterface();
+    void printName();
+    Board myBoard;
+    std::vector < Ship > Fleet;
+    Player();
+    Player(int size);
 };

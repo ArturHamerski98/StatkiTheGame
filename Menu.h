@@ -1,8 +1,7 @@
 #pragma once
 class Menu
 {
-	void printMenu();
-	Menu();
-
+public:
+	static void printMenu();
 };
 

@@ -3,14 +3,10 @@
 #include "Board.h"
 #include "Player.h"
 #include "GameHandler.h"
+#include "Menu.h"
 
 int main() {
-
-    GameHandler myGame;
-    myGame.getBoardSize();
-    myGame.getTurnLimit();
-    system("cls");
-    myGame.pVp();
-
+    system("Color 30");
+    Menu::printMenu();
     return 0;
 }
